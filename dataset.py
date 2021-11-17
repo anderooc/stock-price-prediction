@@ -16,7 +16,7 @@ def csvToDataset(csv_path):
 
     # ohlcv stands for open, high, low, close, volume
     # ohlcvHistories is normalized
-    ohlcvHistories = np.array([normalized[i: i + historyPoints].copy() for i in range(len(normalized) - historyPoints)])
+    ohlcv = np.array([normalized[i: i + historyPoints].copy() for i in range(len(normalized) - historyPoints)])
     nextDayOpenNormalized = np.array([normalized[:, 0][i + historyPoints].copy() for i in range(len(normalized) - historyPoints)])
     nextDayOpenNormalized = np.expand_dims(nextDayOpenNormalized, -1)
 
@@ -28,5 +28,5 @@ def csvToDataset(csv_path):
     yNormalizer = preprocessing.MinMaxScaler()
 
     # Verify there is an equal number of x and y values
-    assert ohlcvHistories.shape[0] == nextDayOpenNormalized.shape[0]
-    return ohlcvHistories, nextDayOpen, nextDayOpen, yNormalizer
+    assert ohlcv.shape[0] == nextDayOpenNormalized.shape[0]
+    return ohlcv, nextDayOpenNormalized, nextDayOpen, yNormalizer
