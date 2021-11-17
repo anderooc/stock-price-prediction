@@ -1,17 +1,18 @@
 from dataset import csvToDataset, historyPoints
-import matplotlib
+from sklearn.neural_network import MLPRegressor
+from sklearn.datasets import make_regression
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 csvPath = input()
-ohlcvHistories, nextDayOpen, unscaledY, yNormalizer = csvToDataset(csvPath)
+ohlcv, nextDayOpen, unscaledY, yNormalizer = csvToDataset(csvPath)
 
-# Percentage of data split for testing
-test_split = 0.8
-n = int(ohlcvHistories.shape[0] * test_split)
+# Spltting data into training and testing
+# OHLCV
+trainX, testX, trainY, testY = train_test_split(ohlcv, nextDayOpen, test_size = 0.8, shuffle = False)
 
-ohlcvTrain = ohlcvHistories[:n]
-yTrain = nextDayOpen[:n]
-
-ohlcvTest = ohlcvHistories[n:]
-yTest = nextDayOpen[n:]
-
+# Splitting up unscaled values for future comparison
+n = int(ohlcv.shape[0] * 0.8)
 unscaledYTest = unscaledY[n:]
+
+
