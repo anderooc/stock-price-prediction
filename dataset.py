@@ -3,7 +3,8 @@ from sklearn import preprocessing
 import numpy as np
 
 # I decided to use past 50 days, can be changed
-historyPoints = 50
+historyPoints = 100
+
 
 def csvToDataset(csv_path):
     data = pd.read_csv(csv_path)
@@ -18,14 +19,13 @@ def csvToDataset(csv_path):
     # ohlcv stands for open, high, low, close, volume
     # ohlcvHistories is normalized
     ohlcv = np.array([normalized[i: i + historyPoints].copy() for i in range(len(normalized) - historyPoints)])
-    dims = ohlcv.shape
     ohlcv = ohlcv[:, :, 0]
-    nextDayCloseNormalized = np.array([normalized[:, 3][i + historyPoints].copy() for i in range(len(normalized) - historyPoints)])
+    nextDayCloseNormalized = np.array(
+        [normalized[:, 3][i + historyPoints].copy() for i in range(len(normalized) - historyPoints)])
     nextDayCloseNormalized = np.expand_dims(nextDayCloseNormalized, -1)
 
     # Predicting close value with past history points
     nextDayClose = np.array([data[:, 3][i + historyPoints].copy() for i in range(len(data) - historyPoints)])
-
     nextDayClose = np.expand_dims(nextDayClose, -1)
 
     # yNormalizer scales values at end out of normalization
@@ -33,4 +33,4 @@ def csvToDataset(csv_path):
 
     # Verify there is an equal number of x and y values
     assert ohlcv.shape[0] == nextDayCloseNormalized.shape[0]
-    return ohlcv, nextDayCloseNormalized, nextDayClose, yNormalizer
+    return ohlcv, nextDayCloseNormalized, nextDayClose, normalizer
