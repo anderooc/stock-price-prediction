@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn import preprocessing
 import numpy as np
 
-# I decided to use past 50 days, can be changed
+# I decided to use past 100 days, can be changed
 historyPoints = 100
 
 
@@ -10,6 +10,7 @@ def csvToDataset(csv_path):
     data = pd.read_csv(csv_path)
     data = data.drop('date', axis=1)
     data = data.drop(0, axis=0)
+    data = data.iloc[::-1]
     data = data.values
 
     # Data is normalized
